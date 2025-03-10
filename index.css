@@ -19,3 +19,15 @@ nav {
 .tabs li {
   cursor: pointer;
 }
+
+.invisible {
+  display: none;
+}
+
+.card {
+  padding: 2rem;
+  width: 800px;
+  margin: auto;
+  border: solid;
+  margin-bottom: 5px;
+}
