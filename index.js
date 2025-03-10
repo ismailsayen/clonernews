@@ -2,7 +2,9 @@ let tab = document.querySelectorAll(".tabs li");
 let notificationBtn = document.querySelector(".notificationBtn");
 let creatUrl = (id) => `https://hacker-news.firebaseio.com/v0/item/${id}.json`;
 let cardsContainer = document.querySelector(".cardsContainer");
-
+const container = document.querySelector(".cardsContainer");
+const windowHasScroll = () =>
+  document.documentElement.scrollHeight > document.documentElement.clientHeight;
 notificationBtn.addEventListener("click", () => {
   location.reload();
 });
@@ -18,10 +20,7 @@ const run = async () => {
     let counter = 0;
     let loader = document.querySelector(".loading");
     loader.classList.remove("invisible");
-    while (counter < 10) {
-      if (counter > 0) {
-        loader.classList.add("invisible");
-      }
+    while (!windowHasScroll() || counter < 10) {
       let data = await getData(creatUrl(lastFetchedId));
       lastFetchedId--;
       if (data.type !== "comment" && !data.dead) {
@@ -29,11 +28,7 @@ const run = async () => {
         counter++;
       }
     }
-
     loader.classList.add("invisible");
-    cards.forEach((element) => {
-      cardsContainer.appendChild(element);
-    });
     setInterval(async () => {
       let data = await getData(
         `https://hacker-news.firebaseio.com/v0/maxitem.json`
@@ -45,9 +40,9 @@ const run = async () => {
     }, 5000);
   }
   loadData();
-  document.addEventListener("scroll", () => {
-    loadData();
-  });
+  // document.addEventListener("scroll", () => {
+  //   loadData();
+  // });
   function createCard(data) {
     let card = document.createElement("div");
     card.classList.add("card");
@@ -62,7 +57,7 @@ const run = async () => {
     card.appendChild(title);
     card.appendChild(url);
     card.appendChild(type);
-    document.body.append(card);
+    container.append(card);
   }
 
   tab.forEach((li) => {
