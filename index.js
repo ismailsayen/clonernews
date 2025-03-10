@@ -8,6 +8,20 @@ const windowHasScroll = () =>
 notificationBtn.addEventListener("click", () => {
   location.reload();
 });
+const convertTime = (time) => {
+  let secondes = Math.floor(time / 1000);
+
+  if (secondes < 60) return `${secondes} secondes ago.`;
+
+  let minutes = Math.floor(secondes / 60);
+  if (minutes < 60) return `${minutes} minutes ago.`;
+
+  let heures = Math.floor(minutes / 60);
+  if (heures < 24) return `${heures} hours ago.`;
+
+  let jours = Math.floor(heures / 24);
+  return `${jours} days ago.`;
+};
 
 const run = async () => {
   let lastId = await getData(
@@ -51,12 +65,15 @@ const run = async () => {
     title.textContent = data.title;
     let url = document.createElement("a");
     let type = document.createElement("p");
+    let time = document.createElement("p");
+    time.textContent = convertTime(data.time);
     type.textContent = data.type;
     url.href = data.url;
     url.textContent = data.url;
     card.appendChild(title);
     card.appendChild(url);
     card.appendChild(type);
+    card.appendChild(time);
     container.append(card);
   }
 
@@ -72,5 +89,4 @@ const run = async () => {
     return json;
   }
 };
-
 run();
