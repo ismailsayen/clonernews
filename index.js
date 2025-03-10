@@ -8,7 +8,6 @@ tab.forEach((li) => {
   li.addEventListener("click", () => {
     defaultData.tabs = li.textContent;
     fetchData();
-    console.log(defaultData.tabs);
   });
 });
 const fetchData = () => {
@@ -31,4 +30,3 @@ const fetchStories = async (url) => {
     console.log("error");
   }
 };
-fetchData();
