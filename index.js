@@ -1,6 +1,6 @@
 let tab = document.querySelectorAll(".tabs li");
 let notificationBtn = document.querySelector(".notificationBtn");
-let creatUrl = (id)=> `https://hacker-news.firebaseio.com/v0/item/${id}.json`
+let creatUrl = (id) => `https://hacker-news.firebaseio.com/v0/item/${id}.json`;
 let cardsContainer = document.querySelector(".cardsContainer");
 
 notificationBtn.addEventListener("click", () => {
@@ -12,25 +12,27 @@ const run = async () => {
     "https://hacker-news.firebaseio.com/v0/maxitem.json"
   );
 
-  let lastFetchedId = lastId
+  let lastFetchedId = lastId;
 
   async function loadData() {
-    let counter = 0 
-    let cards = []
-    let loader = document.querySelector(".loading")
-    loader.classList.remove("invisible")
+    let counter = 0;
+    let loader = document.querySelector(".loading");
+    loader.classList.remove("invisible");
     while (counter < 10) {
+      if (counter > 0) {
+        loader.classList.add("invisible");
+      }
       let data = await getData(creatUrl(lastFetchedId));
       lastFetchedId--;
-      if (data.type !== "comment" && !data.dead){
-        cards.push(createCard(data))
+      if (data.type !== "comment" && !data.dead) {
+        createCard(data);
         counter++;
       }
     }
 
-    loader.classList.add("invisible")
-    cards.forEach(element => {
-      cardsContainer.appendChild(element)
+    loader.classList.add("invisible");
+    cards.forEach((element) => {
+      cardsContainer.appendChild(element);
     });
     setInterval(async () => {
       let data = await getData(
@@ -40,12 +42,12 @@ const run = async () => {
         lastId = data;
         notificationBtn.style.backgroundColor = "green";
       }
-    },5000)
+    }, 5000);
   }
-  loadData()
-document.addEventListener("scroll", () => {
-  loadData()
-})
+  loadData();
+  document.addEventListener("scroll", () => {
+    loadData();
+  });
   function createCard(data) {
     let card = document.createElement("div");
     card.classList.add("card");
@@ -54,16 +56,14 @@ document.addEventListener("scroll", () => {
     title.textContent = data.title;
     let url = document.createElement("a");
     let type = document.createElement("p");
-    type.textContent = data.type
+    type.textContent = data.type;
     url.href = data.url;
     url.textContent = data.url;
     card.appendChild(title);
     card.appendChild(url);
     card.appendChild(type);
-    return card
-    
+    document.body.append(card);
   }
-
 
   tab.forEach((li) => {
     li.addEventListener("click", () => {
