@@ -2,31 +2,34 @@ const defaultData = {
   tabs: "Stories",
   items: [],
 };
-let tab = document.querySelectorAll(".tabs li");
 
-tab.forEach((li) => {
-  li.addEventListener("click", () => {
-    defaultData.tabs = li.textContent;
-    fetchData();
+const run = async () => {
+  let tab = document.querySelectorAll(".tabs li");
+  let lastId = await getData(
+    "https://hacker-news.firebaseio.com/v0/maxitem.json"
+  );
+  console.log(lastId);
+
+  tab.forEach((li) => {
+    li.addEventListener("click", () => {
+      defaultData.tabs = li.textContent;
+      fetchData();
+    });
   });
-});
-const fetchData = () => {
-  switch (defaultData.tabs) {
-    case "Stories":
-      fetchStories("https://hacker-news.firebaseio.com/v0/topstories.json");
-    case "Jobs":
-      fetchStories("https://hacker-news.firebaseio.com/v0/jobstories.json");
-  }
-};
 
-const fetchStories = async (url) => {
-  let ids = [];
-  try {
+  async function fetchData() {
+    switch (defaultData.tabs) {
+      case "Stories":
+        getData("https://hacker-news.firebaseio.com/v0/topstories.json");
+      case "Jobs":
+        getData("https://hacker-news.firebaseio.com/v0/jobstories.json");
+    }
+  }
+
+  async function getData(url) {
     let resp = await fetch(url);
     const json = await resp.json();
-    ids = json;
-    console.log(defaultData.tabs, ids);
-  } catch {
-    console.log("error");
+    return json;
   }
 };
+run();
