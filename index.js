@@ -146,7 +146,7 @@ const run = async () => {
         }
         console.log(res)
       });
-      cmtClassList.add('hide')
+      cmtClassList.add('show')
     }
   }
 
